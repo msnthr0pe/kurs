@@ -65,7 +65,7 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
     {
         navigationView = findViewById(R.id.nav_view);
         Menu navMenu = navigationView.getMenu();
-        navMenu.findItem(R.id.nav_add).setVisible(false);
+        navMenu.findItem(R.id.nav_edit).setVisible(false);
     }
 
     @Override
@@ -85,9 +85,9 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmployeesFragment()).commit();
             toolbar.setTitle("Employees");
         }
-        if (id == R.id.nav_add) {
+        if (id == R.id.nav_edit) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddEmployeeFragment()).commit();
-            toolbar.setTitle("Add login information");
+            toolbar.setTitle("Login information editor");
         }
         if (id == R.id.nav_logout) {
             Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();

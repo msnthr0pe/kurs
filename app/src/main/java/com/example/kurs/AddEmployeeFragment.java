@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +24,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class AddEmployeeFragment extends Fragment {
@@ -41,7 +39,9 @@ public class AddEmployeeFragment extends Fragment {
     EditText newLogin;
     EditText newPassword;
     private String accessLevel;
-    private Button enter;
+    private Button enterBtn;
+    private Button deleteBtn;
+    private Button updateBtn;
 
 
 
@@ -73,16 +73,20 @@ public class AddEmployeeFragment extends Fragment {
             }
         });
 
-        enter = view.findViewById(R.id.enter);
-        enter.setOnClickListener(v -> {
+        enterBtn = view.findViewById(R.id.enter);
+        enterBtn.setOnClickListener(v -> {
             checkForDuplicates();
+        });
+        deleteBtn = view.findViewById(R.id.delete);
+        deleteBtn.setOnClickListener(v -> {
+            deleteRecord();
         });
 
         return view;
     }
 
     private void refreshAccessSpinner() {
-        List<String> arr = Arrays.asList("employee", "manager", "admin");
+        List<String> arr = Arrays.asList("employee", "manager");
 
         if (getActivity() != null) {
             adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, arr);
@@ -91,7 +95,7 @@ public class AddEmployeeFragment extends Fragment {
         }
     }
 
-    private void saveData() {
+    private void saveRecord() {
         db = FirebaseFirestore.getInstance();
 
         String login = newLogin.getText().toString();
@@ -121,6 +125,51 @@ public class AddEmployeeFragment extends Fragment {
                 });
     }
 
+    private void deleteRecord(){
+        db = FirebaseFirestore.getInstance();
+
+        String login = newLogin.getText().toString();
+
+        db.collection("credentials")
+                .whereEqualTo("login", login)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            String access = documentSnapshot.getString("access");
+                            if (Objects.equals(access, "admin")) {
+                                Toast.makeText(getActivity(), "Unable to delete admin user", Toast.LENGTH_SHORT).show();
+                            } else {
+                                String documentID = documentSnapshot.getId();
+                                db.collection("credentials")
+                                        .document(documentID)
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+
+                                                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+
+                                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+                            }
+                        } else {
+
+                            Toast.makeText(getActivity(), "No such record", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private void checkForDuplicates(){
         db = FirebaseFirestore.getInstance();
 
@@ -135,7 +184,7 @@ public class AddEmployeeFragment extends Fragment {
                         newLogin.setText("");
                         newPassword.setText("");
                     } else {
-                        saveData();
+                        saveRecord();
                     }
                 });
     }
