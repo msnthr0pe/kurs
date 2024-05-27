@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 
-public class AddEmployeeFragment extends Fragment {
+public class EditCredentialsFragment extends Fragment {
 
     private FirebaseFirestore db;
     private Spinner spinner;
@@ -42,6 +42,8 @@ public class AddEmployeeFragment extends Fragment {
     private Button enterBtn;
     private Button deleteBtn;
     private Button updateBtn;
+    String login;
+    String password;
 
 
 
@@ -53,7 +55,7 @@ public class AddEmployeeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_employee, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_credentials, container, false);
 
         newLogin = view.findViewById(R.id.new_login);
         newPassword = view.findViewById(R.id.new_password);
@@ -77,11 +79,26 @@ public class AddEmployeeFragment extends Fragment {
         enterBtn.setOnClickListener(v -> {
             checkForDuplicates();
         });
+
         deleteBtn = view.findViewById(R.id.delete);
         deleteBtn.setOnClickListener(v -> {
             deleteRecord();
         });
 
+        updateBtn = view.findViewById(R.id.update);
+        updateBtn.setOnClickListener(v -> {
+            String tempLogin = newLogin.getText().toString();
+            String tempPassword = newPassword.getText().toString();
+            deleteRecord();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            newLogin.setText(tempLogin);
+            newPassword.setText(tempPassword);
+            saveRecord();
+        });
         return view;
     }
 
@@ -98,8 +115,8 @@ public class AddEmployeeFragment extends Fragment {
     private void saveRecord() {
         db = FirebaseFirestore.getInstance();
 
-        String login = newLogin.getText().toString();
-        String password = newPassword.getText().toString();
+        login = newLogin.getText().toString();
+        password = newPassword.getText().toString();
 
         Map<String, Object> data = new HashMap<>();
         data.put("login", login);
@@ -128,7 +145,10 @@ public class AddEmployeeFragment extends Fragment {
     private void deleteRecord(){
         db = FirebaseFirestore.getInstance();
 
-        String login = newLogin.getText().toString();
+        login = newLogin.getText().toString();
+
+        newLogin.setText("");
+        newPassword.setText("");
 
         db.collection("credentials")
                 .whereEqualTo("login", login)
@@ -149,9 +169,7 @@ public class AddEmployeeFragment extends Fragment {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-
                                                 Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
@@ -173,7 +191,7 @@ public class AddEmployeeFragment extends Fragment {
     private void checkForDuplicates(){
         db = FirebaseFirestore.getInstance();
 
-        String login = newLogin.getText().toString();
+        login = newLogin.getText().toString();
 
         db.collection("credentials")
                 .whereEqualTo("login", login)

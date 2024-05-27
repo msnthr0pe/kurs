@@ -86,7 +86,7 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
             toolbar.setTitle("Employees");
         }
         if (id == R.id.nav_edit) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddEmployeeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditCredentialsFragment()).commit();
             toolbar.setTitle("Login information editor");
         }
         if (id == R.id.nav_logout) {
