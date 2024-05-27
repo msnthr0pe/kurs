@@ -16,10 +16,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,7 +75,7 @@ public class AddEmployeeFragment extends Fragment {
 
         enter = view.findViewById(R.id.enter);
         enter.setOnClickListener(v -> {
-            saveData();
+            checkForDuplicates();
         });
 
         return view;
@@ -113,6 +117,25 @@ public class AddEmployeeFragment extends Fragment {
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getActivity(), "Saving failed", Toast.LENGTH_SHORT).show();
 
+                    }
+                });
+    }
+
+    private void checkForDuplicates(){
+        db = FirebaseFirestore.getInstance();
+
+        String login = newLogin.getText().toString();
+
+        db.collection("credentials")
+                .whereEqualTo("login", login)
+                .get().addOnCompleteListener(task -> {
+
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        Toast.makeText(getActivity(), "Account already exists", Toast.LENGTH_SHORT).show();
+                        newLogin.setText("");
+                        newPassword.setText("");
+                    } else {
+                        saveData();
                     }
                 });
     }
