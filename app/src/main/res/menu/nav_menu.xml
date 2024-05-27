@@ -21,6 +21,11 @@
             android:id="@+id/nav_edit"
             android:icon="@drawable/nav_newemployee"
             android:title="Edit accounts"/>
+
+        <item
+            android:id="@+id/nav_chart"
+            android:icon="@drawable/nav_chart_diagram"
+            android:title="Employee chart"/>
     </group>
     <item
         android:title="Account">

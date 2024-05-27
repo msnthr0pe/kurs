@@ -89,6 +89,10 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditCredentialsFragment()).commit();
             toolbar.setTitle("Login information editor");
         }
+        if (id == R.id.nav_chart) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChartFragment()).commit();
+            toolbar.setTitle("Employee chart");
+        }
         if (id == R.id.nav_logout) {
             Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
             clearFile();
