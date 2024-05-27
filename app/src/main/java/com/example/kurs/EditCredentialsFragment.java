@@ -57,6 +57,8 @@ public class EditCredentialsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_credentials, container, false);
 
+        db = FirebaseFirestore.getInstance();
+
         newLogin = view.findViewById(R.id.new_login);
         newPassword = view.findViewById(R.id.new_password);
 
@@ -113,8 +115,6 @@ public class EditCredentialsFragment extends Fragment {
     }
 
     private void saveRecord() {
-        db = FirebaseFirestore.getInstance();
-
         login = newLogin.getText().toString();
         password = newPassword.getText().toString();
 
@@ -143,8 +143,6 @@ public class EditCredentialsFragment extends Fragment {
     }
 
     private void deleteRecord(){
-        db = FirebaseFirestore.getInstance();
-
         login = newLogin.getText().toString();
 
         newLogin.setText("");
@@ -189,8 +187,6 @@ public class EditCredentialsFragment extends Fragment {
     }
 
     private void checkForDuplicates(){
-        db = FirebaseFirestore.getInstance();
-
         login = newLogin.getText().toString();
 
         db.collection("credentials")
