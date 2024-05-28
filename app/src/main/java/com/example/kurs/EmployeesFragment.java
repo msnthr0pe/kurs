@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -66,8 +69,8 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
 
         EventChangeListener();
         ArrayList<Employee> arr = new ArrayList<>();
-        KursAdapter kursAdapter2 = new KursAdapter(getActivity(), arr, this);
-        recyclerView.setAdapter(kursAdapter2);
+        kursAdapter = new KursAdapter(getActivity(), arr, this);
+        recyclerView.setAdapter(kursAdapter);
 
         spinner = view.findViewById(R.id.post_selector);
 
@@ -89,7 +92,22 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+        Fragment fragment = new InfoFragment();
+
+        //Map<String, String> arr = kursAdapter.getInfo(position);
+        Bundle bundle = new Bundle();
+        bundle.putString("name", employeeArrayList.get(position).getName());
+        bundle.putString("surname", employeeArrayList.get(position).getSurname());
+        bundle.putString("age", employeeArrayList.get(position).getAge());
+        bundle.putString("salary", employeeArrayList.get(position).getSalary());
+        bundle.putString("post", employeeArrayList.get(position).getPost());
+        fragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     private void refreshSpinner() {

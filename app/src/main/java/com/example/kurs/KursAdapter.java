@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder> {
 
@@ -21,6 +23,20 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
         this.employeeArrayList = employeeArrayList;
+    }
+
+    public Map<String, String> getInfo(int position) {
+        Map<String, String> arr = new HashMap();
+
+        Employee employee = employeeArrayList.get(position);
+
+        arr.put("name", employee.getName());
+        arr.put("surname", employee.getSurname());
+        arr.put("age", employee.getAge());
+        arr.put("salary", employee.getSalary());
+        arr.put("post", employee.getPost());
+
+        return arr;
     }
 
     @NonNull
