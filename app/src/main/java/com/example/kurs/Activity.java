@@ -51,11 +51,11 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
             if (!Objects.equals(access, "admin")) {
                 hideItem();
             }
-            MainFragment fragment = new MainFragment();
+            MainFragment mainFragment = new MainFragment();
             Bundle bundle = new Bundle();
             bundle.putString("access", access);
-            fragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            mainFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
             navigationView.setCheckedItem(R.id.nav_main);
 
         }

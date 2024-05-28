@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kurs"
         tools:targetApi="31">
+        <receiver
+            android:name=".EmployeeWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/employee_widget_info" />
+        </receiver>
+
         <activity
             android:name=".Activity"
             android:exported="false" />

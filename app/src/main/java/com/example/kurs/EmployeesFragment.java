@@ -2,6 +2,7 @@ package com.example.kurs;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -26,7 +29,7 @@ import java.util.HashSet;
 import java.util.Objects;
 
 
-public class EmployeesFragment extends Fragment{
+public class EmployeesFragment extends Fragment implements RecyclerViewInterface{
 
     RecyclerView recyclerView;
     ArrayList<Employee> employeeArrayList;
@@ -58,15 +61,16 @@ public class EmployeesFragment extends Fragment{
 
         db = FirebaseFirestore.getInstance();
         employeeArrayList = new ArrayList<>();
-        kursAdapter = new KursAdapter(getActivity(), employeeArrayList);
+        kursAdapter = new KursAdapter(getActivity(), employeeArrayList, this);
         recyclerView.setAdapter(kursAdapter);
 
         EventChangeListener();
         ArrayList<Employee> arr = new ArrayList<>();
-        KursAdapter kursAdapter2 = new KursAdapter(getActivity(), arr);
+        KursAdapter kursAdapter2 = new KursAdapter(getActivity(), arr, this);
         recyclerView.setAdapter(kursAdapter2);
 
         spinner = view.findViewById(R.id.post_selector);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -81,6 +85,11 @@ public class EmployeesFragment extends Fragment{
         });
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT).show();
     }
 
     private void refreshSpinner() {
@@ -137,8 +146,7 @@ public class EmployeesFragment extends Fragment{
                 }
             }
         }
-        KursAdapter kursAdapter2 = new KursAdapter(getActivity(), arr);
+        KursAdapter kursAdapter2 = new KursAdapter(getActivity(), arr, this);
         recyclerView.setAdapter(kursAdapter2);
     }
-
 }

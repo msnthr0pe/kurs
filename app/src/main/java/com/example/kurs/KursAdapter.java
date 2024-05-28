@@ -13,10 +13,12 @@ import java.util.ArrayList;
 
 public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder> {
 
+    private final RecyclerViewInterface recyclerViewInterface;
     Context context;
     ArrayList<Employee> employeeArrayList;
 
-    public KursAdapter(Context context, ArrayList<Employee> employeeArrayList) {
+    public KursAdapter(Context context, ArrayList<Employee> employeeArrayList, RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
         this.employeeArrayList = employeeArrayList;
     }
@@ -27,7 +29,7 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
 
         View v = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
 
-        return new KursViewHolder(v);
+        return new KursViewHolder(v, recyclerViewInterface);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
 
         TextView name, surname, age, salary, post;
 
-        public KursViewHolder(@NonNull View itemView) {
+        public KursViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             surname = itemView.findViewById(R.id.surname);
@@ -59,6 +61,15 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
             salary = itemView.findViewById(R.id.salary);
             post = itemView.findViewById(R.id.post);
 
+            itemView.setOnClickListener(v -> {
+                if (recyclerViewInterface != null) {
+                    int pos = getAdapterPosition();
+
+                    if (pos != RecyclerView.NO_POSITION) {
+                        recyclerViewInterface.onItemClick(pos);
+                    }
+                }
+            });
         }
     }
 }
