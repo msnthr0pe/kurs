@@ -24,7 +24,7 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
         this.context = context;
         this.employeeArrayList = employeeArrayList;
     }
-
+    /*
     public Map<String, String> getInfo(int position) {
         Map<String, String> arr = new HashMap();
 
@@ -37,7 +37,7 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
         arr.put("post", employee.getPost());
 
         return arr;
-    }
+    } */
 
     @NonNull
     @Override
@@ -54,8 +54,6 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
 
         holder.name.setText(employee.getName());
         holder.surname.setText(employee.getSurname());
-        holder.age.setText(employee.getAge());
-        holder.salary.setText(employee.getSalary());
         holder.post.setText(employee.getPost());
 
     }
@@ -73,8 +71,6 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
             super(itemView);
             name = itemView.findViewById(R.id.name);
             surname = itemView.findViewById(R.id.surname);
-            age = itemView.findViewById(R.id.age);
-            salary = itemView.findViewById(R.id.salary);
             post = itemView.findViewById(R.id.post);
 
             itemView.setOnClickListener(v -> {

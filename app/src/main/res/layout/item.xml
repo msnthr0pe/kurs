@@ -96,56 +96,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Age: "
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/age"
-                    android:layout_marginStart="8dp"
-                    android:text="default age"
-                    android:textColor="@color/black"
-                    android:textSize="17sp"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:background="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Salary: "
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/salary"
-                    android:layout_marginStart="8dp"
-                    android:text="default salary"
-                    android:textColor="@color/black"
-                    android:textSize="17sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:background="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Post: "
                     android:textColor="@color/black"
                     android:textSize="17sp"
