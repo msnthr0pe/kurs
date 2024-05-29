@@ -77,43 +77,47 @@ public class AccountFragment extends Fragment {
                         Intent data = result.getData();
                         if(data != null && data.getData() != null) {
                             filePath = data.getData();
-                            if(filePath != null) {
-
-                                ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                                progressDialog.setTitle("Uploading...");
-                                progressDialog.show();
-
-                                StorageReference ref = storageReference.child("profile_pic/" + getIdFromFile());
-                                deleteImageAttempt();
-                                ref.putFile(filePath)
-                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                            @Override
-                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                progressDialog.dismiss();
-                                                Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                progressDialog.dismiss();
-                                                Toast.makeText(getActivity(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                            @Override
-                                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                                double progress = (100.0*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
-                                                progressDialog.setMessage("Uploaded " + (int)progress + "%");
-                                            }
-                                        });
-                            }
-
-                            AndroidUtil.setProfilePic(getContext(), filePath, profilePic);
+                            uploadImage();
                         }
                     }
                 }
                 );
+    }
+
+    private void uploadImage() {
+        if(filePath != null) {
+
+            ProgressDialog progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("profile_pic/" + getIdFromFile());
+            deleteImageAttempt();
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getActivity(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            double progress = (100.0*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int)progress + "%");
+                        }
+                    });
+        }
+
+        AndroidUtil.setProfilePic(getContext(), filePath, profilePic);
     }
     private void deleteImageAttempt() {
         StorageReference deleteFile = storageReference.child("profile_pic/" + getIdFromFile());
@@ -174,7 +178,12 @@ public class AccountFragment extends Fragment {
         });
 
 
+        setPicture();
 
+        return view;
+    }
+
+    private void setPicture() {
         String lastLogin = getIdFromFile();
 
         if (!lastLogin.isEmpty()) {
@@ -187,8 +196,6 @@ public class AccountFragment extends Fragment {
                         }
                     });
         }
-
-        return view;
     }
 
     public void createFile(String filename, String login, String password) {
@@ -206,8 +213,7 @@ public class AccountFragment extends Fragment {
         }
     }
 
-    private String getIdFromFile()
-    {
+    private String getIdFromFile()  {
         ArrayList<String> arrayList = new ArrayList<>();
         try (FileInputStream fis = getActivity().openFileInput("currentLogin")) {
             InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -277,6 +283,8 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
+                        createFile("currentLogin", documentReference.getId(), "");
+                        createFile("cred", login, password);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
