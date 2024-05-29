@@ -99,7 +99,8 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
         }
         if (id == R.id.nav_logout) {
             Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
-            clearFile();
+            clearFile("cred");
+            clearFile("currentLogin");
             Intent intent = new Intent(Activity.this, MainActivity.class);
             startActivity(intent);
         }
@@ -108,10 +109,10 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
         return true;
     }
 
-    public void clearFile()
+    public void clearFile(String filename)
     {
-        String filename = "cred";
-        String fileContents = "" + '\n' + "";
+
+        String fileContents = "";
         try (FileOutputStream fos = this.openFileOutput(filename, Context.MODE_PRIVATE)) {
             fos.write(fileContents.getBytes());
         } catch (IOException e) {

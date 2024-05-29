@@ -17,15 +17,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import kotlin.Unit;
@@ -57,7 +61,7 @@ public class AccountFragment extends Fragment {
                                 progressDialog.setTitle("Uploading...");
                                 progressDialog.show();
 
-                                StorageReference ref = storageReference.child("profile_pic/" + UUID.randomUUID().toString());
+                                StorageReference ref = storageReference.child("profile_pic/" + getIdFromFile());
                                 ref.putFile(filePath)
                                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
@@ -95,7 +99,6 @@ public class AccountFragment extends Fragment {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         profilePic = view.findViewById(R.id.profileImage);
         profilePic.setOnClickListener(v -> {
@@ -110,7 +113,42 @@ public class AccountFragment extends Fragment {
 
         });
 
+        String lastLogin = getIdFromFile();
+
+        if (!lastLogin.isEmpty()) {
+            FirebaseStorage.getInstance().getReference().child("profile_pic")
+                    .child(lastLogin).getDownloadUrl()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Uri uri = task.getResult();
+                            AndroidUtil.setProfilePic(getContext(), uri, profilePic);
+                        }
+                    });
+        }
+
         return view;
+    }
+
+    private String getIdFromFile()
+    {
+        ArrayList<String> arrayList = new ArrayList<>();
+        try (FileInputStream fis = getActivity().openFileInput("currentLogin")) {
+            InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
+                String line = reader.readLine();
+                arrayList.add(line);
+                while (line != null) {
+                    line = reader.readLine();
+                    arrayList.add(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return arrayList.get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     /*
 

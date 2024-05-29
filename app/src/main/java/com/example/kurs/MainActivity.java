@@ -33,10 +33,14 @@ public class MainActivity extends AppCompatActivity {
     static boolean isChecked = false;
 
 
-    public void createFile(String login, String password)
-    {
-        String filename = "cred";
-        String fileContents = login + '\n' + password;
+    public void createFile(String filename, String login, String password) {
+        String fileContents;
+        if (Objects.equals(filename, "cred")) {
+            fileContents = login + '\n' + password;
+        }
+        else {
+            fileContents = login;
+        }
         try (FileOutputStream fos = this.openFileOutput(filename, Context.MODE_PRIVATE)) {
             fos.write(fileContents.getBytes());
         } catch (IOException e) {
@@ -44,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> readFile()
-    {
+    public ArrayList<String> readFile() {
         ArrayList<String> arrayList = new ArrayList<>();
         try (FileInputStream fis = this.openFileInput("cred")) {
             InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -119,12 +122,13 @@ public class MainActivity extends AppCompatActivity {
                         if (Objects.equals(document, password)) {
 
                             if (isChecked || auto) {
-                                createFile(login, password);
+                                createFile("cred", login, password);
                             }
                             else {
-                                createFile("", "");
+                                createFile("cred", "", "");
                             }
                             intent.putExtra("access", access);
+                            createFile("currentLogin", documentSnapshot.getId(), "");
 
                             startActivity(intent);
 
