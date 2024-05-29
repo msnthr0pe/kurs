@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
                                 createFile("cred", "", "");
                             }
                             intent.putExtra("access", access);
+                            intent.putExtra("login", login);
+                            intent.putExtra("password", password);
+
                             createFile("currentLogin", documentSnapshot.getId(), "");
 
                             startActivity(intent);

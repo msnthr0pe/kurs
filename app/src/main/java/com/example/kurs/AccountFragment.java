@@ -1,6 +1,7 @@
 package com.example.kurs;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,12 +15,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.OnProgressListener;
@@ -28,10 +37,14 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import kotlin.Unit;
@@ -40,14 +53,20 @@ import kotlin.jvm.functions.Function1;
 
 public class AccountFragment extends Fragment {
 
-    ImageView profilePic;
     ActivityResultLauncher<Intent> imagePickLauncher;
     Uri filePath;
     FirebaseStorage storage;
     StorageReference storageReference;
+    FirebaseFirestore db;
 
-
-
+    ImageView profilePic;
+    EditText newLogin;
+    EditText newPassword;
+    Button applyBtn;
+    String oldLogin;
+    String login;
+    String password;
+    String access;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,10 +128,38 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+
+        db = FirebaseFirestore.getInstance();
+        newLogin = view.findViewById(R.id.new_login);
+        newPassword = view.findViewById(R.id.new_password);
+        applyBtn = view.findViewById(R.id.apply);
+        access = "";
+        if (getArguments() != null) {
+            access = getArguments().getString("access");
+            oldLogin = getArguments().getString("login");
+        }
+
+        applyBtn.setOnClickListener(v -> {
+            login = newLogin.getText().toString();
+            password = newPassword.getText().toString();
+
+            DeleteData();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            saveData();
+
+            Toast.makeText(getActivity(), getArguments().getString("login") + " " + getArguments().getString("password"), Toast.LENGTH_SHORT).show();
+            newLogin.setText("");
+            newPassword.setText("");
+        });
+
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
         profilePic = view.findViewById(R.id.profileImage);
         profilePic.setOnClickListener(v -> {
 
@@ -125,6 +172,7 @@ public class AccountFragment extends Fragment {
                         }
                     });
         });
+
 
 
         String lastLogin = getIdFromFile();
@@ -141,6 +189,21 @@ public class AccountFragment extends Fragment {
         }
 
         return view;
+    }
+
+    public void createFile(String filename, String login, String password) {
+        String fileContents;
+        if (Objects.equals(filename, "cred")) {
+            fileContents = login + '\n' + password;
+        }
+        else {
+            fileContents = login;
+        }
+        try (FileOutputStream fos = getActivity().openFileOutput(filename, Context.MODE_PRIVATE)) {
+            fos.write(fileContents.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getIdFromFile()
@@ -164,17 +227,63 @@ public class AccountFragment extends Fragment {
         }
         return null;
     }
-    /*
 
-    void updateToFirestore(){
-        FirebaseUtil.currentUserDetails().set(currentUserModel)
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        Toast.makeText(getActivity(), "Updated successfully", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(getActivity(), "Update failed", Toast.LENGTH_SHORT).show();
+    private void DeleteData(){
+        db.collection("credentials")
+                .whereEqualTo("login", oldLogin)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            String documentID = documentSnapshot.getId();
+                            db.collection("credentials")
+                                    .document(documentID)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+
+                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                        } else {
+
+                            Toast.makeText(getActivity(), "No such record", Toast.LENGTH_SHORT).show();
+
+                        }
                     }
                 });
-    }*/
+    }
 
+    private void saveData() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("login", login);
+        data.put("password", password);
+        data.put("access", access);
+
+        db.collection("credentials")
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Saving failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
 }

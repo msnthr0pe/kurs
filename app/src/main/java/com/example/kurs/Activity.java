@@ -72,13 +72,17 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         String access = getIntent().getStringExtra("access");
+
+
         MainFragment mainFragment = new MainFragment();
+        AccountFragment accountFragment = new AccountFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("access", access);
+        bundle.putAll(getIntent().getExtras());
         mainFragment.setArguments(bundle);
+        accountFragment.setArguments(bundle);
 
         if (id == R.id.nav_account) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AccountFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, accountFragment).commit();
             toolbar.setTitle("Account");
         }
         if (id == R.id.nav_main) {
