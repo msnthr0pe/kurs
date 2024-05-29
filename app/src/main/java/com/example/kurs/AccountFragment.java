@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -57,11 +59,13 @@ public class AccountFragment extends Fragment {
                         if(data != null && data.getData() != null) {
                             filePath = data.getData();
                             if(filePath != null) {
+
                                 ProgressDialog progressDialog = new ProgressDialog(getActivity());
                                 progressDialog.setTitle("Uploading...");
                                 progressDialog.show();
 
                                 StorageReference ref = storageReference.child("profile_pic/" + getIdFromFile());
+                                deleteImageAttempt();
                                 ref.putFile(filePath)
                                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
@@ -92,6 +96,15 @@ public class AccountFragment extends Fragment {
                 }
                 );
     }
+    private void deleteImageAttempt() {
+        StorageReference deleteFile = storageReference.child("profile_pic/" + getIdFromFile());
+        deleteFile.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getActivity(), "Previous Image Deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,6 +115,7 @@ public class AccountFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         profilePic = view.findViewById(R.id.profileImage);
         profilePic.setOnClickListener(v -> {
+
             ImagePicker.with(this).cropSquare().compress(512).maxResultSize(512,512)
                     .createIntent(new Function1<Intent, Unit>() {
                         @Override
@@ -110,8 +124,8 @@ public class AccountFragment extends Fragment {
                             return null;
                         }
                     });
-
         });
+
 
         String lastLogin = getIdFromFile();
 
