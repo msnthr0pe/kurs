@@ -76,10 +76,14 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
         Bundle bundle = new Bundle();
         bundle.putString("access", access);
         mainFragment.setArguments(bundle);
+
+        if (id == R.id.nav_account) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AccountFragment()).commit();
+            toolbar.setTitle("Account");
+        }
         if (id == R.id.nav_main) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
             toolbar.setTitle("Employee manager");
-
         }
         if (id == R.id.nav_employees) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmployeesFragment()).commit();
