@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -67,10 +69,12 @@ public class AccountFragment extends Fragment {
     String login;
     String password;
     String access;
+    String oldId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         imagePickLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if(result.getResultCode() == Activity.RESULT_OK) {
@@ -85,6 +89,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void uploadImage() {
+
         if(filePath != null) {
 
             ProgressDialog progressDialog = new ProgressDialog(getActivity());
@@ -92,7 +97,11 @@ public class AccountFragment extends Fragment {
             progressDialog.show();
 
             StorageReference ref = storageReference.child("profile_pic/" + getIdFromFile());
-            deleteImageAttempt();
+            Toast.makeText(getActivity(), getIdFromFile(), Toast.LENGTH_SHORT).show();
+
+            //deleteImageAttempt();
+
+            //Toast.makeText(getActivity(), String.valueOf(filePath), Toast.LENGTH_SHORT).show();
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -120,7 +129,7 @@ public class AccountFragment extends Fragment {
         AndroidUtil.setProfilePic(getContext(), filePath, profilePic);
     }
     private void deleteImageAttempt() {
-        StorageReference deleteFile = storageReference.child("profile_pic/" + getIdFromFile());
+        StorageReference deleteFile = storageReference.child("profile_pic/" + oldId);
         deleteFile.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -154,9 +163,12 @@ public class AccountFragment extends Fragment {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            saveData();
 
-            Toast.makeText(getActivity(), getArguments().getString("login") + " " + getArguments().getString("password"), Toast.LENGTH_SHORT).show();
+            oldId = getIdFromFile();
+            saveData();
+            deleteImageAttempt();
+
+            //Toast.makeText(getActivity(), getArguments().getString("login") + " " + getArguments().getString("password"), Toast.LENGTH_SHORT).show();
             newLogin.setText("");
             newPassword.setText("");
         });
@@ -212,6 +224,7 @@ public class AccountFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
 
     private String getIdFromFile()  {
         ArrayList<String> arrayList = new ArrayList<>();
@@ -285,6 +298,7 @@ public class AccountFragment extends Fragment {
                         Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
                         createFile("currentLogin", documentReference.getId(), "");
                         createFile("cred", login, password);
+                        uploadImage();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
