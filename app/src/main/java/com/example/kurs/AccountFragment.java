@@ -97,11 +97,7 @@ public class AccountFragment extends Fragment {
             progressDialog.show();
 
             StorageReference ref = storageReference.child("profile_pic/" + getIdFromFile());
-            Toast.makeText(getActivity(), getIdFromFile(), Toast.LENGTH_SHORT).show();
 
-            //deleteImageAttempt();
-
-            //Toast.makeText(getActivity(), String.valueOf(filePath), Toast.LENGTH_SHORT).show();
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -133,7 +129,7 @@ public class AccountFragment extends Fragment {
         deleteFile.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getActivity(), "Previous Image Deleted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Previous Image Deleted", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -168,7 +164,6 @@ public class AccountFragment extends Fragment {
             saveData();
             deleteImageAttempt();
 
-            //Toast.makeText(getActivity(), getArguments().getString("login") + " " + getArguments().getString("password"), Toast.LENGTH_SHORT).show();
             newLogin.setText("");
             newPassword.setText("");
         });
@@ -264,14 +259,14 @@ public class AccountFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Void unused) {
 
-                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
 
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
 
-                                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
 
                                         }
                                     });
