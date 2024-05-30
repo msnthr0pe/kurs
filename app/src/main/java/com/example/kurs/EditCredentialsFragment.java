@@ -68,7 +68,11 @@ public class EditCredentialsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                accessLevel = item;
+                if (item.equals("Работник")) {
+                    accessLevel = "employee";
+                } else {
+                    accessLevel = "manager";
+                }
             }
 
             @Override
@@ -105,7 +109,7 @@ public class EditCredentialsFragment extends Fragment {
     }
 
     private void refreshAccessSpinner() {
-        List<String> arr = Arrays.asList("employee", "manager");
+        List<String> arr = Arrays.asList("Работник", "Менеджер");
 
         if (getActivity() != null) {
             adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, arr);

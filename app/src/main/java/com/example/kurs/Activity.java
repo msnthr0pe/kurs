@@ -51,11 +51,13 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
             if (!Objects.equals(access, "admin")) {
                 hideItem();
             }
-            MainFragment mainFragment = new MainFragment();
+            //MainFragment mainFragment = new MainFragment();
+            EmployeeManagerFragment employeeManagerFragment = new EmployeeManagerFragment();
             Bundle bundle = new Bundle();
             bundle.putString("access", access);
-            mainFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
+            //mainFragment.setArguments(bundle);
+            employeeManagerFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, employeeManagerFragment).commit();
             navigationView.setCheckedItem(R.id.nav_main);
 
         }
@@ -74,32 +76,34 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
         String access = getIntent().getStringExtra("access");
 
 
-        MainFragment mainFragment = new MainFragment();
+        //MainFragment mainFragment = new MainFragment();
+        EmployeeManagerFragment employeeManagerFragment = new EmployeeManagerFragment();
         AccountFragment accountFragment = new AccountFragment();
         Bundle bundle = new Bundle();
         bundle.putAll(getIntent().getExtras());
-        mainFragment.setArguments(bundle);
+        //mainFragment.setArguments(bundle);
+        employeeManagerFragment.setArguments(bundle);
         accountFragment.setArguments(bundle);
 
         if (id == R.id.nav_account) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, accountFragment).commit();
-            toolbar.setTitle("Account");
+            toolbar.setTitle("Аккаунт");
         }
         if (id == R.id.nav_main) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
-            toolbar.setTitle("Employee manager");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, employeeManagerFragment).commit();
+            toolbar.setTitle("Редактор сотрудников");
         }
         if (id == R.id.nav_employees) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmployeesFragment()).commit();
-            toolbar.setTitle("Employees");
+            toolbar.setTitle("Сотрудники");
         }
         if (id == R.id.nav_edit) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditCredentialsFragment()).commit();
-            toolbar.setTitle("Login information editor");
+            toolbar.setTitle("Редактор акканутов");
         }
         if (id == R.id.nav_chart) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChartFragment()).commit();
-            toolbar.setTitle("Employee chart");
+            toolbar.setTitle("Диаграмма аккаунтов");
         }
         if (id == R.id.nav_logout) {
             Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();

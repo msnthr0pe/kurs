@@ -8,38 +8,38 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_account"
-            android:icon="@drawable/nav_account_circle"
-            android:title="Account"/>
-
-        <item
             android:id="@+id/nav_main"
             android:icon="@drawable/nav_person"
-            android:title="Employee manager"/>
+            android:title="@string/employeeManager"/>
 
         <item
             android:id="@+id/nav_employees"
             android:icon="@drawable/nav_employees"
-            android:title="Staff"/>
+            android:title="@string/staff"/>
 
         <item
             android:id="@+id/nav_edit"
             android:icon="@drawable/nav_editlist"
-            android:title="Edit accounts"/>
+            android:title="@string/accountEditor"/>
 
         <item
             android:id="@+id/nav_chart"
             android:icon="@drawable/nav_chart_diagram"
-            android:title="Employee chart"/>
+            android:title="@string/chart"/>
     </group>
     <item
-        android:title="Account">
+        android:title="@string/accountSection">
 
         <menu>
             <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/nav_account_circle"
+                android:title="@string/account"/>
+
+            <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/nav_logout"
-                android:title="Logout"/>
+                android:title="@string/logout"/>
         </menu>
 
     </item>

@@ -2,11 +2,37 @@
     <string name="app_name">kurs</string>
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="close_nav">Close Navigation Drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="loginPrompt">Логин</string>
+    <string name="passwordPrompt">Пароль</string>
+    <string name="rememberMe">Запомнить меня</string>
+    <string name="enter">Зайти</string>
+    <string name="newLoginPrompt">Новый логин</string>
+    <string name="newPasswordPrompt">Новый пароль</string>
+    <string name="applyChanges">Применить изменения</string>
+    <string name="id">ID</string>
+    <string name="personalCardNumber">Номер личной карточки</string>
+    <string name="accessLevel">Доступ</string>
+    <string name="delete">Удалить</string>
+    <string name="add">Добавить</string>
+    <string name="update">Обновить</string>
+    <string name="byDefault">По умолчанию</string>
+    <string name="addEmployee">Добавить сотрудника</string>
+    <string name="editEmployeeInfo">Редактировать инфо</string>
+    <string name="deleteEmployee">Удалить сотрудника</string>
+    <string name="nameItem">Имя:</string>
+    <string name="surnameItem">Фамилия:</string>
+    <string name="postItem">Должность:</string>
+    <string name="account">Аккаунт</string>
+    <string name="employeeManager">Управление сотрудниками</string>
+    <string name="staff">Сотрудники</string>
+    <string name="accountEditor">Редактор аккаунтов</string>
+    <string name="chart">Диаграмма</string>
+    <string name="accountSection">Работа с аккаунтом</string>
+    <string name="logout">Выход из аккаунта</string>
 
 
 </resources>

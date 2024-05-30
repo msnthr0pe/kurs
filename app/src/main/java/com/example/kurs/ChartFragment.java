@@ -89,9 +89,9 @@ public class ChartFragment extends Fragment {
         Pie pie = AnyChart.pie();
 
         List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Admins", adminCount));
-        data.add(new ValueDataEntry("Managers", managerCount));
-        data.add(new ValueDataEntry("Employees", employeeCount));
+        data.add(new ValueDataEntry("Администраторы", adminCount));
+        data.add(new ValueDataEntry("Менеджеры", managerCount));
+        data.add(new ValueDataEntry("Работники", employeeCount));
 
         pie.data(data);
 

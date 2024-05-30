@@ -92,7 +92,7 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
 
     @Override
     public void onItemClick(int position) {
-        Fragment fragment = new InfoFragment();
+        Fragment fragment = new InformationFragment();
 
         //Map<String, String> arr = kursAdapter.getInfo(position);
         Bundle bundle = new Bundle();

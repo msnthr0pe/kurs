@@ -44,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name: "
+                    android:text="@string/nameItem"
                     android:textColor="@color/black"
                     android:textSize="17sp"
                     android:textStyle="bold"/>
@@ -53,7 +53,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/name"
                     android:layout_marginStart="8dp"
-                    android:text="default name"
                     android:textColor="@color/black"
                     android:textSize="17sp"/>
 
@@ -70,7 +69,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Surname: "
+                    android:text="@string/surnameItem"
                     android:textColor="@color/black"
                     android:textSize="17sp"
                     android:textStyle="bold"/>
@@ -79,7 +78,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/surname"
                     android:layout_marginStart="8dp"
-                    android:text="default surname"
                     android:textColor="@color/black"
                     android:textSize="17sp"/>
 
@@ -96,7 +94,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Post: "
+                    android:text="@string/postItem"
                     android:textColor="@color/black"
                     android:textSize="17sp"
                     android:textStyle="bold"/>
@@ -105,7 +103,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/post"
                     android:layout_marginStart="8dp"
-                    android:text="default post"
                     android:textColor="@color/black"
                     android:textSize="17sp"/>
             </LinearLayout>
