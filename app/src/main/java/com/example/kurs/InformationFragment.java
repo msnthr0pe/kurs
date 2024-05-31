@@ -3,10 +3,13 @@ package com.example.kurs;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -23,6 +26,9 @@ public class InformationFragment extends Fragment {
     TextView employmentRecordText;
     TextView scheduleText;
 
+    Button deleteBtn;
+    Button editBtn;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,9 @@ public class InformationFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_information, container, false);
+
+        deleteBtn = view.findViewById(R.id.del);
+        editBtn = view.findViewById(R.id.redactor);
 
         if (getArguments() != null) {
             IDText = view.findViewById(R.id.textView1);
@@ -70,6 +79,20 @@ public class InformationFragment extends Fragment {
             employmentRecordText.setText(employmentRecord);
             scheduleText.setText(schedule);
         }
+
+        editBtn.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putAll(getArguments());
+            bundle.putString("mode", "edit");
+
+            Fragment fragment = new ModifyEmployeeFragment();
+            fragment.setArguments(bundle);
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        });
 
         return view;
     }

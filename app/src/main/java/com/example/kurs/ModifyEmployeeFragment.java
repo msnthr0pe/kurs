@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -83,6 +84,31 @@ public class ModifyEmployeeFragment extends Fragment {
         vacationScheduleInput = view.findViewById(R.id.vacation_schedule_input);
         employmentRecordInput = view.findViewById(R.id.employment_record_input);
         scheduleInput = view.findViewById(R.id.schedule_input);
+
+        if (getArguments() != null) {
+
+            String ID = getArguments().getString("ID");
+            String name = getArguments().getString("name");
+            String surname = getArguments().getString("surname");
+            String post = getArguments().getString("post");
+            String personalCard = getArguments().getString("personalCard");
+            String employmentContract = getArguments().getString("employmentContract");
+            String personalDataConsent = getArguments().getString("personalDataConsent");
+            String vacationSchedule = getArguments().getString("vacationSchedule");
+            String employmentRecord = getArguments().getString("employmentRecord");
+            String schedule = getArguments().getString("schedule");
+
+            IDInput.setText(ID, TextView.BufferType.EDITABLE);
+            nameInput.setText(surname);
+            surnameInput.setText(name);
+            postInput.setText(post);
+            personalCardInput.setText(personalCard);
+            employmentContractInput.setText(employmentContract);
+            personalDataConsentInput.setText(personalDataConsent);
+            vacationScheduleInput.setText(vacationSchedule);
+            employmentRecordInput.setText(employmentRecord);
+            scheduleInput.setText(schedule);
+        }
 
         saveEditButton.setOnClickListener(v -> {
             if (getArguments() != null) {
