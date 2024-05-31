@@ -33,6 +33,15 @@
     <string name="chart">Диаграмма</string>
     <string name="accountSection">Работа с аккаунтом</string>
     <string name="logout">Выход из аккаунта</string>
+    <string name="employmentContractNumber">Номер трудового договора</string>
+    <string name="personalDataConsent">Согласие на обработку персональных данных</string>
+    <string name="vacationSchedule">График отпусков</string>
+    <string name="employmentRecordNumber">Номер трудовой книжки</string>
+    <string name="schedule">Расписание</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="position">Должность</string>
+    <string name="save">Сохранить</string>
 
 
 </resources>

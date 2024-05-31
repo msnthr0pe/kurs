@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddEmployeeFragment">
+
+
+    <EditText
+        android:id="@+id/id_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/first_name_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/name"
+        app:layout_constraintEnd_toEndOf="@+id/id_input"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/id_input"
+        app:layout_constraintTop_toBottomOf="@+id/id_input" />
+
+    <EditText
+        android:id="@+id/second_name_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/surname"
+        app:layout_constraintEnd_toEndOf="@+id/first_name_input"
+        app:layout_constraintStart_toStartOf="@+id/first_name_input"
+        app:layout_constraintTop_toBottomOf="@+id/first_name_input" />
+
+    <EditText
+        android:id="@+id/position_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/position"
+        app:layout_constraintEnd_toEndOf="@+id/second_name_input"
+        app:layout_constraintStart_toStartOf="@+id/second_name_input"
+        app:layout_constraintTop_toBottomOf="@+id/second_name_input" />
+
+    <EditText
+        android:id="@+id/personal_card_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/personalCardNumber"
+        app:layout_constraintEnd_toEndOf="@+id/position_input"
+        app:layout_constraintStart_toStartOf="@+id/position_input"
+        app:layout_constraintTop_toBottomOf="@+id/position_input" />
+
+    <EditText
+        android:id="@+id/employment_contract_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/employmentContractNumber"
+        app:layout_constraintEnd_toEndOf="@+id/personal_card_input"
+        app:layout_constraintStart_toStartOf="@+id/personal_card_input"
+        app:layout_constraintTop_toBottomOf="@+id/personal_card_input" />
+
+    <EditText
+        android:id="@+id/personal_data_consent_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/personalDataConsent"
+        app:layout_constraintEnd_toEndOf="@+id/employment_contract_input"
+        app:layout_constraintStart_toStartOf="@+id/employment_contract_input"
+        app:layout_constraintTop_toBottomOf="@+id/employment_contract_input" />
+
+    <EditText
+        android:id="@+id/vacation_schedule_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/vacationSchedule"
+        app:layout_constraintEnd_toEndOf="@+id/personal_data_consent_input"
+        app:layout_constraintStart_toStartOf="@+id/personal_data_consent_input"
+        app:layout_constraintTop_toBottomOf="@+id/personal_data_consent_input" />
+
+    <EditText
+        android:id="@+id/employment_record_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/employmentRecordNumber"
+        app:layout_constraintEnd_toEndOf="@+id/vacation_schedule_input"
+        app:layout_constraintStart_toStartOf="@+id/vacation_schedule_input"
+        app:layout_constraintTop_toBottomOf="@+id/vacation_schedule_input" />
+
+    <EditText
+        android:id="@+id/schedule_input"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/schedule"
+        app:layout_constraintEnd_toEndOf="@+id/employment_record_input"
+        app:layout_constraintStart_toStartOf="@+id/employment_record_input"
+        app:layout_constraintTop_toBottomOf="@+id/employment_record_input" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="@+id/schedule_input"
+        app:layout_constraintStart_toStartOf="@+id/schedule_input"
+        app:layout_constraintTop_toBottomOf="@+id/schedule_input" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

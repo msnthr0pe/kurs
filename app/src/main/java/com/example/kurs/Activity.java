@@ -34,7 +34,7 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Home");
+        toolbar.setTitle("Редактор сотрудников");
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
