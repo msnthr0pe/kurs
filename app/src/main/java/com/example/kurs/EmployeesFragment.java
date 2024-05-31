@@ -118,18 +118,20 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
 
     private void refreshSpinner() {
         ArrayList<String> arr = new ArrayList<>();
-        arr.add("Все должности");
         for (int i=0; i<employeeArrayList.size(); i++) {
             arr.add(employeeArrayList.get(i).getPost());
         }
         HashSet<String> set = new HashSet<>(arr);
         arr.clear();
+        arr.add("Все должности");
         arr.addAll(set);
+
         Log.d("recycle", String.valueOf(arr.size()));
         if (getActivity() != null) {
             adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, arr);
             adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
             spinner.setAdapter(adapter);
+            //spinner.setSelection(1);
         }
     }
 
