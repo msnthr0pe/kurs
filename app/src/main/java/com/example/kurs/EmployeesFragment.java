@@ -94,13 +94,19 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
     public void onItemClick(int position) {
         Fragment fragment = new InformationFragment();
 
-        //Map<String, String> arr = kursAdapter.getInfo(position);
         Bundle bundle = new Bundle();
-        bundle.putString("name", employeeArrayList.get(position).getName());
-        bundle.putString("surname", employeeArrayList.get(position).getSurname());
-        bundle.putString("age", employeeArrayList.get(position).getAge());
-        bundle.putString("salary", employeeArrayList.get(position).getSalary());
-        bundle.putString("post", employeeArrayList.get(position).getPost());
+        Employee pos = employeeArrayList.get(position);
+        bundle.putString("ID", pos.getID());
+        bundle.putString("name", pos.getName());
+        bundle.putString("surname", pos.getSurname());
+        bundle.putString("post", pos.getPost());
+        bundle.putString("personalCard", pos.getPersonalCard());
+        bundle.putString("employmentContract", pos.getEmploymentContract());
+        bundle.putString("personalDataConsent", pos.getPersonalDataConsent());
+        bundle.putString("vacationSchedule", pos.getVacationSchedule());
+        bundle.putString("employmentRecord", pos.getEmploymentRecord());
+        bundle.putString("schedule", pos.getSchedule());
+
         fragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -112,7 +118,7 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
 
     private void refreshSpinner() {
         ArrayList<String> arr = new ArrayList<>();
-        arr.add("All");
+        arr.add("Все должности");
         for (int i=0; i<employeeArrayList.size(); i++) {
             arr.add(employeeArrayList.get(i).getPost());
         }
@@ -129,13 +135,13 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
 
     private void EventChangeListener() {
 
-        db.collection("newemployees")
+        db.collection("employees")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
                         if (error != null) {
-                            Log.e("Firestore error", error.getMessage());
+                            Log.e("kurs", error.getMessage());
                             return;
                         }
 
@@ -154,7 +160,7 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
 
     private void refreshRecycler(String post) {
         ArrayList<Employee> arr = new ArrayList<>(employeeArrayList);
-        if (post != "All") {
+        if (post != "Все должности") {
             int i = 0;
             while (i < arr.size()) {
                 if (!Objects.equals(arr.get(i).getPost(), post)) {

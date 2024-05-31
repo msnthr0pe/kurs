@@ -24,20 +24,6 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
         this.context = context;
         this.employeeArrayList = employeeArrayList;
     }
-    /*
-    public Map<String, String> getInfo(int position) {
-        Map<String, String> arr = new HashMap();
-
-        Employee employee = employeeArrayList.get(position);
-
-        arr.put("name", employee.getName());
-        arr.put("surname", employee.getSurname());
-        arr.put("age", employee.getAge());
-        arr.put("salary", employee.getSalary());
-        arr.put("post", employee.getPost());
-
-        return arr;
-    } */
 
     @NonNull
     @Override
@@ -65,7 +51,7 @@ public class KursAdapter extends RecyclerView.Adapter<KursAdapter.KursViewHolder
 
     public static class KursViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name, surname, age, salary, post;
+        TextView name, surname, post;
 
         public KursViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);

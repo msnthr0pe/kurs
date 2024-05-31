@@ -12,11 +12,17 @@ import android.widget.TextView;
 
 public class InformationFragment extends Fragment {
 
-    TextView nameTextView;
-    TextView surnameTextView;
-    TextView ageTextView;
-    TextView salaryTextView;
-    TextView postTextView;
+    TextView IDText;
+    TextView firstNameText;
+    TextView secondNameText;
+    TextView positionText;
+    TextView personalCardText;
+    TextView employmentContractText;
+    TextView personalDataConsentText;
+    TextView vacationScheduleText;
+    TextView employmentRecordText;
+    TextView scheduleText;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,23 +37,38 @@ public class InformationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_information, container, false);
 
         if (getArguments() != null) {
-            nameTextView = view.findViewById(R.id.textView1);
-            surnameTextView = view.findViewById(R.id.textView2);
-            ageTextView = view.findViewById(R.id.textView3);
-            salaryTextView = view.findViewById(R.id.textView4);
-            postTextView = view.findViewById(R.id.textView5);
+            IDText = view.findViewById(R.id.textView1);
+            firstNameText = view.findViewById(R.id.textView2);
+            secondNameText = view.findViewById(R.id.textView3);
+            positionText = view.findViewById(R.id.textView4);
+            personalCardText = view.findViewById(R.id.textView5);
+            employmentContractText = view.findViewById(R.id.textView6);
+            personalDataConsentText = view.findViewById(R.id.textView7);
+            vacationScheduleText = view.findViewById(R.id.textView8);
+            employmentRecordText =  view.findViewById(R.id.textView9);
+            scheduleText = view.findViewById(R.id.textView10);
 
+            String ID = getArguments().getString("ID");
             String name = getArguments().getString("name");
             String surname = getArguments().getString("surname");
-            String age = getArguments().getString("age");
-            String salary = getArguments().getString("salary");
             String post = getArguments().getString("post");
+            String personalCard = getArguments().getString("personalCard");
+            String employmentContract = getArguments().getString("employmentContract");
+            String personalDataConsent = getArguments().getString("personalDataConsent");
+            String vacationSchedule = getArguments().getString("vacationSchedule");
+            String employmentRecord = getArguments().getString("employmentRecord");
+            String schedule = getArguments().getString("schedule");
 
-            nameTextView.setText(name);
-            surnameTextView.setText(surname);
-            ageTextView.setText(age);
-            salaryTextView.setText(salary);
-            postTextView.setText(post);
+            IDText.setText(ID);
+            firstNameText.setText(surname);
+            secondNameText.setText(name);
+            positionText.setText(post);
+            personalCardText.setText(personalCard);
+            employmentContractText.setText(employmentContract);
+            personalDataConsentText.setText(personalDataConsent);
+            vacationScheduleText.setText(vacationSchedule);
+            employmentRecordText.setText(employmentRecord);
+            scheduleText.setText(schedule);
         }
 
         return view;

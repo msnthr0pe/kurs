@@ -145,24 +145,24 @@ public class ModifyEmployeeFragment extends Fragment {
         data.put("employmentRecord", employmentRecord);
         data.put("schedule", schedule);
 
-        db.collection("test")
+        db.collection("employees")
                 .whereEqualTo("ID", ID)
                 .get().addOnCompleteListener(task -> {
 
                     if (!(task.isSuccessful() && !task.getResult().isEmpty())) {
-                        db.collection("test")
+                        db.collection("employees")
                                 .add(data)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
-                                        Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Успешно сохранено", Toast.LENGTH_SHORT).show();
 
                                         clearFields();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getActivity(), "Saving failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Сохранение не удалось", Toast.LENGTH_SHORT).show();
 
                                     }
                                 });
@@ -178,7 +178,7 @@ public class ModifyEmployeeFragment extends Fragment {
     private void DeleteData(){
         ID = IDInput.getText().toString();
 
-        db.collection("test")
+        db.collection("employees")
                 .whereEqualTo("ID", ID)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -187,27 +187,27 @@ public class ModifyEmployeeFragment extends Fragment {
                         if (task.isSuccessful() && !task.getResult().isEmpty()) {
                             DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
                             String documentID = documentSnapshot.getId();
-                            db.collection("test")
+                            db.collection("employees")
                                     .document(documentID)
                                     .delete()
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
 
-                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Успешно", Toast.LENGTH_SHORT).show();
 
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
 
-                                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Ошибка", Toast.LENGTH_SHORT).show();
 
                                         }
                                     });
                         } else {
 
-                            Toast.makeText(getActivity(), "No such record", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Такой записи не существует", Toast.LENGTH_SHORT).show();
 
                         }
                     }
