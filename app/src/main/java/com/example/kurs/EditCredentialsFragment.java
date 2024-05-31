@@ -135,12 +135,12 @@ public class EditCredentialsFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Сохранено", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Saving failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Ошибка", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -162,7 +162,7 @@ public class EditCredentialsFragment extends Fragment {
                             DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
                             String access = documentSnapshot.getString("access");
                             if (Objects.equals(access, "admin")) {
-                                Toast.makeText(getActivity(), "Unable to delete admin user", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Невозможно удалить администратора", Toast.LENGTH_SHORT).show();
                             } else {
                                 String documentID = documentSnapshot.getId();
                                 db.collection("credentials")
@@ -171,20 +171,20 @@ public class EditCredentialsFragment extends Fragment {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "Успешно", Toast.LENGTH_SHORT).show();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
 
-                                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "Ошибка", Toast.LENGTH_SHORT).show();
 
                                             }
                                         });
                             }
                         } else {
 
-                            Toast.makeText(getActivity(), "No such record", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Такой записи не существует", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -198,7 +198,7 @@ public class EditCredentialsFragment extends Fragment {
                 .get().addOnCompleteListener(task -> {
 
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        Toast.makeText(getActivity(), "Account already exists", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Аккаунт уже существует", Toast.LENGTH_SHORT).show();
                         newLogin.setText("");
                         newPassword.setText("");
                     } else {

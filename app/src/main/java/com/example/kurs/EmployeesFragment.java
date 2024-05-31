@@ -12,13 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -28,7 +26,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -95,6 +92,9 @@ public class EmployeesFragment extends Fragment implements RecyclerViewInterface
         Fragment fragment = new InformationFragment();
 
         Bundle bundle = new Bundle();
+        if (getArguments() != null) {
+            bundle.putString("access", getArguments().getString("access"));
+        }
         Employee pos = employeeArrayList.get(position);
         bundle.putString("ID", pos.getID());
         bundle.putString("name", pos.getName());

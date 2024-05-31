@@ -23,6 +23,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Objects;
+
 
 public class InformationFragment extends Fragment {
 
@@ -49,6 +51,15 @@ public class InformationFragment extends Fragment {
 
     }
 
+    public void hideFromEmployee(){
+        deleteBtn.setVisibility(View.INVISIBLE);
+        editBtn.setVisibility(View.INVISIBLE);
+    }
+
+    public void hideFromManager(){
+        deleteBtn.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,6 +72,13 @@ public class InformationFragment extends Fragment {
         editBtn = view.findViewById(R.id.redactor);
 
         if (getArguments() != null) {
+            if (Objects.equals(getArguments().getString("access"), "manager")) {
+                hideFromManager();
+            }
+            if (Objects.equals(getArguments().getString("access"), "employee")) {
+                hideFromEmployee();
+            }
+
             IDText = view.findViewById(R.id.textView1);
             firstNameText = view.findViewById(R.id.textView2);
             secondNameText = view.findViewById(R.id.textView3);

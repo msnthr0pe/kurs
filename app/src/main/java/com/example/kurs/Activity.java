@@ -78,11 +78,13 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
         //MainFragment mainFragment = new MainFragment();
         EmployeeManagerFragment employeeManagerFragment = new EmployeeManagerFragment();
         AccountFragment accountFragment = new AccountFragment();
+        EmployeesFragment employeesFragment = new EmployeesFragment();
         Bundle bundle = new Bundle();
         bundle.putAll(getIntent().getExtras());
         //mainFragment.setArguments(bundle);
         employeeManagerFragment.setArguments(bundle);
         accountFragment.setArguments(bundle);
+        employeesFragment.setArguments(bundle);
 
         if (id == R.id.nav_account) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, accountFragment).commit();
@@ -93,7 +95,7 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
             toolbar.setTitle("Редактор сотрудников");
         }
         if (id == R.id.nav_employees) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmployeesFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, employeesFragment).commit();
             toolbar.setTitle("Сотрудники");
         }
         if (id == R.id.nav_edit) {
@@ -105,7 +107,7 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
             toolbar.setTitle("Диаграмма аккаунтов");
         }
         if (id == R.id.nav_logout) {
-            Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Успешный выход", Toast.LENGTH_SHORT).show();
             clearFile("cred");
             clearFile("currentLogin");
             Intent intent = new Intent(Activity.this, MainActivity.class);

@@ -79,7 +79,7 @@ public class ChartFragment extends Fragment {
                             }
                             makePie(view);
                         } else {
-                            Toast.makeText(getActivity(), "Error getting documents", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Ошибка получения документов", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

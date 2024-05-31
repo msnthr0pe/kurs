@@ -1,4 +1,4 @@
-package com.example.kurs;
+/*package com.example.kurs;
 
 import android.os.Bundle;
 
@@ -86,7 +86,7 @@ public class MainFragment extends Fragment {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-    */
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -217,4 +217,4 @@ public class MainFragment extends Fragment {
                 });
     }
 
-}
+}*/

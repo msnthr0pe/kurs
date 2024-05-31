@@ -138,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             loginInput.setText("");
                             passwordInput.setText("");
-                            Toast.makeText(MainActivity.this, "Wrong credintials", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Неверные данные", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
                         loginInput.setText("");
                         passwordInput.setText("");
-                        Toast.makeText(MainActivity.this, "Wrong credintials", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Неверные данные", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

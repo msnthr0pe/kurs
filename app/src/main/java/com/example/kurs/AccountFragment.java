@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -103,26 +105,26 @@ public class AccountFragment extends Fragment {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Загружено", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Ошибка" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                             double progress = (100.0*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int)progress + "%");
+                            progressDialog.setMessage("Загрузка " + (int)progress + "%");
                         }
                     });
         }
 
-        AndroidUtil.setProfilePic(getContext(), filePath, profilePic);
+        setProfilePic(getContext(), filePath, profilePic);
     }
     private void deleteImageAttempt() {
         StorageReference deleteFile = storageReference.child("profile_pic/" + oldId);
@@ -132,6 +134,10 @@ public class AccountFragment extends Fragment {
                 //Toast.makeText(getActivity(), "Previous Image Deleted", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static void setProfilePic(Context context, Uri imageUri, ImageView imageView) {
+        Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);
     }
 
     @Override
@@ -199,7 +205,7 @@ public class AccountFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Uri uri = task.getResult();
-                            AndroidUtil.setProfilePic(getContext(), uri, profilePic);
+                            setProfilePic(getContext(), uri, profilePic);
                         }
                     });
         }
@@ -272,7 +278,7 @@ public class AccountFragment extends Fragment {
                                     });
                         } else {
 
-                            Toast.makeText(getActivity(), "No such record", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Такой записи не существует", Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -290,7 +296,7 @@ public class AccountFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Сохранено", Toast.LENGTH_SHORT).show();
                         createFile("currentLogin", documentReference.getId(), "");
                         createFile("cred", login, password);
                         uploadImage();
@@ -298,7 +304,7 @@ public class AccountFragment extends Fragment {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Saving failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Ошибка", Toast.LENGTH_SHORT).show();
 
                     }
                 });

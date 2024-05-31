@@ -1,4 +1,4 @@
-package com.example.kurs;
+/*package com.example.kurs;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,3 +13,4 @@ public class AndroidUtil {
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);
     }
 }
+*/
