@@ -1,5 +1,6 @@
 package com.example.kurs;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,8 @@ public class EditCredentialsFragment extends Fragment {
     String login;
     String password;
 
+    Dialog dialog;
+
 
 
     @Override
@@ -87,9 +90,28 @@ public class EditCredentialsFragment extends Fragment {
         });
 
         deleteBtn = view.findViewById(R.id.delete);
-        deleteBtn.setOnClickListener(v -> {
-            deleteRecord();
-        });
+        if (getContext() != null) {
+            dialog = new Dialog(getContext());
+            dialog.setContentView(R.layout.delete_dialog);
+            if (getActivity().getDrawable(R.drawable.dialog_background) != null) {
+                dialog.getWindow().setBackgroundDrawable(getActivity().getDrawable(R.drawable.dialog_background));
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.setCancelable(false);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                Button yes = dialog.findViewById(R.id.btn_yes);
+                Button no = dialog.findViewById(R.id.btn_no);
+
+                yes.setOnClickListener(v1 -> {
+                    deleteRecord();
+                    dialog.hide();
+                });
+
+                no.setOnClickListener(v2 -> dialog.hide());
+
+            }
+        }
+        deleteBtn.setOnClickListener(v -> dialog.show());
 
         updateBtn = view.findViewById(R.id.update);
         updateBtn.setOnClickListener(v -> {

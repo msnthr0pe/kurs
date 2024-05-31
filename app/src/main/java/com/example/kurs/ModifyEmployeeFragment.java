@@ -1,5 +1,7 @@
 package com.example.kurs;
 
+import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,7 +32,7 @@ public class ModifyEmployeeFragment extends Fragment {
 
     FirebaseFirestore db;
 
-    Button saveEditButton;
+    Button modificationButton;
 
     View view;
 
@@ -56,6 +58,8 @@ public class ModifyEmployeeFragment extends Fragment {
     String employmentRecord;
     String schedule;
 
+    Dialog dialog;
+
 
     public ModifyEmployeeFragment() {}
 
@@ -72,7 +76,7 @@ public class ModifyEmployeeFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        saveEditButton = view.findViewById(R.id.done_btn);
+        modificationButton = view.findViewById(R.id.done_btn);
 
         IDInput = view.findViewById(R.id.id_input);
         nameInput = view.findViewById(R.id.first_name_input);
@@ -110,7 +114,30 @@ public class ModifyEmployeeFragment extends Fragment {
             scheduleInput.setText(schedule);
         }
 
-        saveEditButton.setOnClickListener(v -> {
+        if (getContext() != null) {
+            dialog = new Dialog(getContext());
+            dialog.setContentView(R.layout.delete_dialog);
+            if (getActivity().getDrawable(R.drawable.dialog_background) != null) {
+                dialog.getWindow().setBackgroundDrawable(getActivity().getDrawable(R.drawable.dialog_background));
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.setCancelable(false);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                Button yes = dialog.findViewById(R.id.btn_yes);
+                Button no = dialog.findViewById(R.id.btn_no);
+
+                yes.setOnClickListener(v1 -> {
+                    DeleteData();
+                    clearFields();
+                    dialog.hide();
+                });
+
+                no.setOnClickListener(v2 -> dialog.hide());
+
+            }
+        }
+
+        modificationButton.setOnClickListener(v -> {
             if (getArguments() != null) {
                 if (Objects.equals(getArguments().getString("mode"), "add")) {
 
@@ -127,8 +154,7 @@ public class ModifyEmployeeFragment extends Fragment {
                     saveData();
                 }
                 if (Objects.equals(getArguments().getString("mode"), "delete")) {
-                    DeleteData();
-                    clearFields();
+                    dialog.show();
                 }
             }
         });

@@ -1,5 +1,6 @@
 package com.example.kurs;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,8 @@ public class InformationFragment extends Fragment {
     Button editBtn;
 
     FirebaseFirestore db;
+
+    Dialog dialog;
 
 
     @Override
@@ -127,20 +130,43 @@ public class InformationFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-        deleteBtn.setOnClickListener(v -> {
-            deleteRecord();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        if (getContext() != null) {
+            dialog = new Dialog(getContext());
+            dialog.setContentView(R.layout.delete_dialog);
+            if (getActivity().getDrawable(R.drawable.dialog_background) != null) {
+                dialog.getWindow().setBackgroundDrawable(getActivity().getDrawable(R.drawable.dialog_background));
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.setCancelable(false);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-            Fragment fragment = new EmployeesFragment();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+                Button yes = dialog.findViewById(R.id.btn_yes);
+                Button no = dialog.findViewById(R.id.btn_no);
+
+                yes.setOnClickListener(v1 -> {
+                    deleteRecord();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    Fragment fragment = new EmployeesFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+                    dialog.hide();
+                });
+
+                no.setOnClickListener(v2 -> dialog.hide());
+
+            }
+        }
+
+        deleteBtn.setOnClickListener(v -> {
+            dialog.show();
         });
 
 
