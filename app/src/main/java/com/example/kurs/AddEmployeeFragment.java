@@ -2,6 +2,7 @@ package com.example.kurs;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,17 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AddEmployeeFragment extends Fragment {
 
     FirebaseFirestore db;
 
     Button saveButton;
+
+    View view;
 
     EditText IDInput;
     EditText nameInput;
@@ -55,7 +64,7 @@ public class AddEmployeeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_employee, container, false);
+        view = inflater.inflate(R.layout.fragment_add_employee, container, false);
 
         db = FirebaseFirestore.getInstance();
 
@@ -73,39 +82,69 @@ public class AddEmployeeFragment extends Fragment {
         scheduleInput = view.findViewById(R.id.schedule_input);
 
         saveButton.setOnClickListener(v -> {
-            ID = IDInput.getText().toString();
-            name = nameInput.getText().toString();
-            surname = surnameInput.getText().toString();
-            post = postInput.getText().toString();
-            personalCard = personalCardInput.getText().toString();
-            employmentContract = employmentContractInput.getText().toString();
-            personalDataConsent = personalDataConsentInput.getText().toString();
-            vacationSchedule = vacationScheduleInput.getText().toString();
-            employmentRecord = employmentRecordInput.getText().toString();
-            schedule = scheduleInput.getText().toString();
-
-            ///NOTE TO SELF: CREATE DUPLICATE CHECK METHOD FOR ID///
-            Map<String, Object> data = new HashMap<>();
-            data.put("ID", ID);
-            data.put("name", name);
-            data.put("surname", surname);
-            data.put("post", post);
-            data.put("personalCard", personalCard);
-            data.put("employmentContract", employmentContract);
-            data.put("personalDataConsent", personalDataConsent);
-            data.put("vacationSchedule", vacationSchedule);
-            data.put("employmentRecord", employmentRecord);
-            data.put("schedule", schedule);
-
-            ViewGroup group = view.findViewById(R.id.constraintAdd);
-            for (int i = 0, count = group.getChildCount(); i < count; ++i) {
-                View view2 = group.getChildAt(i);
-                if (view2 instanceof EditText) {
-                    ((EditText)view2).setText("");
-                }
-            }
+            saveData();
         });
 
         return view;
+    }
+
+    private void saveData() {
+
+        ID = IDInput.getText().toString();
+        name = nameInput.getText().toString();
+        surname = surnameInput.getText().toString();
+        post = postInput.getText().toString();
+        personalCard = personalCardInput.getText().toString();
+        employmentContract = employmentContractInput.getText().toString();
+        personalDataConsent = personalDataConsentInput.getText().toString();
+        vacationSchedule = vacationScheduleInput.getText().toString();
+        employmentRecord = employmentRecordInput.getText().toString();
+        schedule = scheduleInput.getText().toString();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("ID", ID);
+        data.put("name", name);
+        data.put("surname", surname);
+        data.put("post", post);
+        data.put("personalCard", personalCard);
+        data.put("employmentContract", employmentContract);
+        data.put("personalDataConsent", personalDataConsent);
+        data.put("vacationSchedule", vacationSchedule);
+        data.put("employmentRecord", employmentRecord);
+        data.put("schedule", schedule);
+
+        db.collection("test")
+                .whereEqualTo("ID", ID)
+                .get().addOnCompleteListener(task -> {
+
+                    if (!(task.isSuccessful() && !task.getResult().isEmpty())) {
+                        db.collection("test")
+                                .add(data)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
+                                        ViewGroup group = view.findViewById(R.id.constraintAdd);
+                                        for (int i = 0, count = group.getChildCount(); i < count; ++i) {
+                                            View view2 = group.getChildAt(i);
+                                            if (view2 instanceof EditText) {
+                                                ((EditText)view2).setText("");
+                                            }
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getActivity(), "Saving failed", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+                    }
+                    else {
+                        Toast.makeText(getActivity(), "Такой ID уже существует", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
     }
 }

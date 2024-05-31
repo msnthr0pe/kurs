@@ -54,15 +54,16 @@ public class EmployeeManagerFragment extends Fragment {
 
         if (getArguments() != null) {
             String access = getArguments().getString("access");
-            accessText.setText("Signed in as admin");
+            accessText.setText("Уровень доступа: администратор");
+
+            if (Objects.equals(access, "manager")) {
+                accessText.setText("Уровень доступа: менеджер");
+                // hideFromManager(view);
+            }
 
             if (Objects.equals(access, "employee")) {
-                accessText.setText("Signed in as employee");
+                accessText.setText("Уровень доступа: работник");
                 //hideFromEmployee(view);
-            }
-            if (Objects.equals(access, "manager")) {
-                accessText.setText("Signed in as manager");
-                // hideFromManager(view);
             }
         }
 
