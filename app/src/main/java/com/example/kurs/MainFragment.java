@@ -134,7 +134,6 @@ public class MainFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             saveData();
-
         });
 
         return view;

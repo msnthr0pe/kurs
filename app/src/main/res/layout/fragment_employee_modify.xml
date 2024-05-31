@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/constraintAdd"
-    tools:context=".AddEmployeeFragment">
+    tools:context=".ModifyEmployeeFragment">
 
 
     <EditText
@@ -111,11 +111,11 @@
         app:layout_constraintTop_toBottomOf="@+id/employment_record_input" />
 
     <Button
-        android:id="@+id/save_btn"
+        android:id="@+id/done_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/save"
+        android:text="@string/done"
         app:layout_constraintEnd_toEndOf="@+id/schedule_input"
         app:layout_constraintStart_toStartOf="@+id/schedule_input"
         app:layout_constraintTop_toBottomOf="@+id/schedule_input" />

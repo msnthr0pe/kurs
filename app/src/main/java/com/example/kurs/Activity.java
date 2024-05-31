@@ -74,8 +74,6 @@ public class Activity extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        String access = getIntent().getStringExtra("access");
-
 
         //MainFragment mainFragment = new MainFragment();
         EmployeeManagerFragment employeeManagerFragment = new EmployeeManagerFragment();

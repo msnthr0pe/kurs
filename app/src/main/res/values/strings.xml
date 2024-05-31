@@ -42,6 +42,7 @@
     <string name="surname">Фамилия</string>
     <string name="position">Должность</string>
     <string name="save">Сохранить</string>
+    <string name="done">Готово</string>
 
 
 </resources>

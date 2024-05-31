@@ -12,21 +12,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class AddEmployeeFragment extends Fragment {
+public class ModifyEmployeeFragment extends Fragment {
 
     FirebaseFirestore db;
 
-    Button saveButton;
+    Button saveEditButton;
 
     View view;
 
@@ -53,8 +56,8 @@ public class AddEmployeeFragment extends Fragment {
     String schedule;
 
 
-    public AddEmployeeFragment() {
-    }
+    public ModifyEmployeeFragment() {}
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,11 +67,11 @@ public class AddEmployeeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_employee, container, false);
+        view = inflater.inflate(R.layout.fragment_employee_modify, container, false);
 
         db = FirebaseFirestore.getInstance();
 
-        saveButton = view.findViewById(R.id.save_btn);
+        saveEditButton = view.findViewById(R.id.done_btn);
 
         IDInput = view.findViewById(R.id.id_input);
         nameInput = view.findViewById(R.id.first_name_input);
@@ -81,11 +84,40 @@ public class AddEmployeeFragment extends Fragment {
         employmentRecordInput = view.findViewById(R.id.employment_record_input);
         scheduleInput = view.findViewById(R.id.schedule_input);
 
-        saveButton.setOnClickListener(v -> {
-            saveData();
+        saveEditButton.setOnClickListener(v -> {
+            if (getArguments() != null) {
+                if (Objects.equals(getArguments().getString("mode"), "add")) {
+
+                    saveData();
+
+                }
+                if (Objects.equals(getArguments().getString("mode"), "edit")) {
+                    DeleteData();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    saveData();
+                }
+                if (Objects.equals(getArguments().getString("mode"), "delete")) {
+                    DeleteData();
+                    clearFields();
+                }
+            }
         });
 
         return view;
+    }
+
+    private void clearFields() {
+        ViewGroup group = view.findViewById(R.id.constraintAdd);
+        for (int i = 0, count = group.getChildCount(); i < count; ++i) {
+            View view2 = group.getChildAt(i);
+            if (view2 instanceof EditText) {
+                ((EditText)view2).setText("");
+            }
+        }
     }
 
     private void saveData() {
@@ -124,13 +156,8 @@ public class AddEmployeeFragment extends Fragment {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
                                         Toast.makeText(getActivity(), "Saving successful", Toast.LENGTH_SHORT).show();
-                                        ViewGroup group = view.findViewById(R.id.constraintAdd);
-                                        for (int i = 0, count = group.getChildCount(); i < count; ++i) {
-                                            View view2 = group.getChildAt(i);
-                                            if (view2 instanceof EditText) {
-                                                ((EditText)view2).setText("");
-                                            }
-                                        }
+
+                                        clearFields();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -146,5 +173,44 @@ public class AddEmployeeFragment extends Fragment {
                 });
 
 
+    }
+
+    private void DeleteData(){
+        ID = IDInput.getText().toString();
+
+        db.collection("test")
+                .whereEqualTo("ID", ID)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            String documentID = documentSnapshot.getId();
+                            db.collection("test")
+                                    .document(documentID)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+
+                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                        } else {
+
+                            Toast.makeText(getActivity(), "No such record", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
     }
 }

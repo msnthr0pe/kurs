@@ -10,13 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -29,8 +24,15 @@ public class EmployeeManagerFragment extends Fragment {
 
 
 
-    public EmployeeManagerFragment() {
+    public EmployeeManagerFragment() {}
 
+    public void hideFromEmployee(){
+        deleteButton.setVisibility(View.INVISIBLE);
+        editButton.setVisibility(View.INVISIBLE);
+    }
+
+    public void hideFromManager(){
+        deleteButton.setVisibility(View.INVISIBLE);
     }
 
 
@@ -58,17 +60,42 @@ public class EmployeeManagerFragment extends Fragment {
 
             if (Objects.equals(access, "manager")) {
                 accessText.setText("Уровень доступа: менеджер");
-                // hideFromManager(view);
+                hideFromManager();
             }
 
             if (Objects.equals(access, "employee")) {
                 accessText.setText("Уровень доступа: работник");
-                //hideFromEmployee(view);
+                hideFromEmployee();
             }
         }
+        Bundle bundle = new Bundle();
 
         addButton.setOnClickListener(v -> {
-            Fragment fragment = new AddEmployeeFragment();
+            bundle.putString("mode", "add");
+            Fragment fragment = new ModifyEmployeeFragment();
+            fragment.setArguments(bundle);
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        });
+
+        editButton.setOnClickListener(v -> {
+            bundle.putString("mode", "edit");
+            Fragment fragment = new ModifyEmployeeFragment();
+            fragment.setArguments(bundle);
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        });
+
+        deleteButton.setOnClickListener(v -> {
+            bundle.putString("mode", "delete");
+            Fragment fragment = new ModifyEmployeeFragment();
+            fragment.setArguments(bundle);
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
