@@ -2,6 +2,7 @@ package com.example.kurs;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,6 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class InformationFragment extends Fragment {
@@ -29,6 +40,8 @@ public class InformationFragment extends Fragment {
     Button deleteBtn;
     Button editBtn;
 
+    FirebaseFirestore db;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +54,8 @@ public class InformationFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_information, container, false);
+
+        db = FirebaseFirestore.getInstance();
 
         deleteBtn = view.findViewById(R.id.del);
         editBtn = view.findViewById(R.id.redactor);
@@ -94,6 +109,62 @@ public class InformationFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
+        deleteBtn.setOnClickListener(v -> {
+            deleteRecord();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            Fragment fragment = new EmployeesFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        });
+
+
         return view;
+    }
+
+    private void deleteRecord() {
+        String id = IDText.getText().toString();
+
+        db.collection("employees")
+                .whereEqualTo("ID", id)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            String documentID = documentSnapshot.getId();
+                            db.collection("employees")
+                                    .document(documentID)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+
+                                            Toast.makeText(getActivity(), "Успешно", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                            Toast.makeText(getActivity(), "Ошибка", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                        } else {
+
+                            Toast.makeText(getActivity(), "Такой записи не существует", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
     }
 }
