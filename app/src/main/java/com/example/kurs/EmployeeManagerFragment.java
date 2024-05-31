@@ -10,8 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -23,10 +28,10 @@ public class EmployeeManagerFragment extends Fragment {
     Button deleteButton;
 
 
+
     public EmployeeManagerFragment() {
 
     }
-
 
 
     @Override
@@ -40,10 +45,12 @@ public class EmployeeManagerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_employee_manager, container, false);
+
         accessText = view.findViewById(R.id.access_level);
         addButton = view.findViewById(R.id.addBtn);
         editButton = view.findViewById(R.id.editBtn);
         deleteButton = view.findViewById(R.id.deleteBtn);
+
 
         if (getArguments() != null) {
             String access = getArguments().getString("access");
