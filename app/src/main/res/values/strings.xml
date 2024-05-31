@@ -43,6 +43,7 @@
     <string name="position">Должность</string>
     <string name="save">Сохранить</string>
     <string name="done">Готово</string>
+    <string name="edit">Редактировать</string>
 
 
 </resources>
