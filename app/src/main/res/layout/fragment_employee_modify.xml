@@ -10,6 +10,7 @@
 
     <EditText
         android:id="@+id/id_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -21,6 +22,7 @@
 
     <EditText
         android:id="@+id/first_name_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -32,6 +34,7 @@
 
     <EditText
         android:id="@+id/second_name_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -42,6 +45,7 @@
 
     <EditText
         android:id="@+id/position_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -52,6 +56,7 @@
 
     <EditText
         android:id="@+id/personal_card_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -62,6 +67,7 @@
 
     <EditText
         android:id="@+id/employment_contract_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -72,6 +78,7 @@
 
     <EditText
         android:id="@+id/personal_data_consent_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -82,6 +89,7 @@
 
     <EditText
         android:id="@+id/vacation_schedule_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -92,6 +100,7 @@
 
     <EditText
         android:id="@+id/employment_record_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -102,6 +111,7 @@
 
     <EditText
         android:id="@+id/schedule_input"
+        android:singleLine="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -112,6 +122,7 @@
 
     <Button
         android:id="@+id/done_btn"
+        android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
