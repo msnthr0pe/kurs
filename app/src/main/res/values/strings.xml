@@ -37,7 +37,7 @@
     <string name="personalDataConsent">Согласие на обработку персональных данных</string>
     <string name="vacationSchedule">График отпусков</string>
     <string name="employmentRecordNumber">Номер трудовой книжки</string>
-    <string name="schedule">Расписание</string>
+    <string name="schedule">График работы</string>
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="position">Должность</string>

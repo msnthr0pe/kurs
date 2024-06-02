@@ -9,8 +9,8 @@
 
     <Spinner
         android:id="@+id/post_selector"
-        android:layout_width="410dp"
-        android:layout_height="36dp"
+        android:layout_width="403dp"
+        android:layout_height="37dp"
         android:background="@color/white"
         android:prompt="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
@@ -22,8 +22,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="407dp"
-        android:layout_height="694dp"
+        android:layout_width="408dp"
+        android:layout_height="674dp"
         android:background="#ECECEC"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
