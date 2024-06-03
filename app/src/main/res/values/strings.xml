@@ -48,6 +48,10 @@
     <string name="no">Нет</string>
     <string name="confirmationMessage">Вы уверены, что хотите удалить запись?</string>
     <string name="deletionMessage">Удаление записи</string>
+    <string name="welcomeMsg">Вас приветствует приложение \"Кадровик\"</string>
+    <string name="description">Это приложение реализует часть функционала системы кадрового учёта. Оно позволяет сотрудникам, ведущим учёт кадров, удобно взаимодействовать с системой</string>
+    <string name="authorText">Автор: Павловский Илья Дмитриевич. Группа: ИКБО-06-22</string>
+    <string name="startApp">Начать работу</string>
 
 
 </resources>

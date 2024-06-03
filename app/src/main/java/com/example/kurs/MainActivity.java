@@ -1,46 +1,153 @@
 package com.example.kurs;
 
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Toast;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentSnapshot;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import android.view.inputmethod.InputMethodManager;
+
+import com.google.android.material.navigation.NavigationView;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    FirebaseFirestore db;
-    String fileName = "cred";
-    EditText loginInput;
-    EditText passwordInput;
-
-    static boolean isChecked = false;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
 
 
-    public void createFile(String filename, String login, String password) {
-        String fileContents;
-        if (Objects.equals(filename, "cred")) {
-            fileContents = login + '\n' + password;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_m);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Редактор сотрудников");
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav,
+                R.string.close_nav) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                try {
+                    inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
+                } catch (Exception ignored){}
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                try {
+                    inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
+                } catch (Exception ignored){}
+            }
+        };
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        if (savedInstanceState == null) {
+            String access = getIntent().getStringExtra("access");
+            if (!Objects.equals(access, "admin")) {
+                hideItem();
+            }
+            //MainFragment mainFragment = new MainFragment();
+            EmployeeManagerFragment employeeManagerFragment = new EmployeeManagerFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("access", access);
+            //mainFragment.setArguments(bundle);
+            employeeManagerFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, employeeManagerFragment).commit();
+            navigationView.setCheckedItem(R.id.nav_main);
+
         }
-        else {
-            fileContents = login;
+    }
+
+    private void hideItem()
+    {
+        navigationView = findViewById(R.id.nav_view);
+        Menu navMenu = navigationView.getMenu();
+        navMenu.findItem(R.id.nav_edit).setVisible(false);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        //MainFragment mainFragment = new MainFragment();
+        EmployeeManagerFragment employeeManagerFragment = new EmployeeManagerFragment();
+        AccountFragment accountFragment = new AccountFragment();
+        EmployeesFragment employeesFragment = new EmployeesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putAll(getIntent().getExtras());
+        //mainFragment.setArguments(bundle);
+        employeeManagerFragment.setArguments(bundle);
+        accountFragment.setArguments(bundle);
+        employeesFragment.setArguments(bundle);
+
+        if (id == R.id.nav_account) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, accountFragment).commit();
+            toolbar.setTitle("Аккаунт");
         }
+        if (id == R.id.nav_main) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, employeeManagerFragment).commit();
+            toolbar.setTitle("Редактор сотрудников");
+        }
+        if (id == R.id.nav_employees) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, employeesFragment).commit();
+            toolbar.setTitle("Сотрудники");
+        }
+        if (id == R.id.nav_edit) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditCredentialsFragment()).commit();
+            toolbar.setTitle("Редактор акканутов");
+        }
+        if (id == R.id.nav_chart) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChartFragment()).commit();
+            toolbar.setTitle("Диаграмма аккаунтов");
+        }
+        if (id == R.id.nav_logout) {
+            //Toast.makeText(this, "Успешный выход", Toast.LENGTH_SHORT).show();
+            clearFile("cred");
+            clearFile("currentLogin");
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void clearFile(String filename)
+    {
+
+        String fileContents = "";
         try (FileOutputStream fos = this.openFileOutput(filename, Context.MODE_PRIVATE)) {
             fos.write(fileContents.getBytes());
         } catch (IOException e) {
@@ -48,105 +155,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> readFile() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        try (FileInputStream fis = this.openFileInput("cred")) {
-            InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
-            try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
-                String line = reader.readLine();
-                arrayList.add(line);
-                while (line != null) {
-                    line = reader.readLine();
-                    arrayList.add(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return arrayList;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        String autoLogin;
-        String autoPassword;
-        File f = getFileStreamPath(fileName);
-        if (f.length() > 1) {
-            ArrayList<String> arrayList = readFile();
-            autoLogin = arrayList.get(0);
-            autoPassword = arrayList.get(1);
-            logIntoAccount(autoLogin, autoPassword, true);
-        }
-
-        loginInput = findViewById(R.id.new_login);
-        passwordInput = findViewById(R.id.new_password);
-        Button enterBtn = findViewById(R.id.enter);
-
-        enterBtn.setOnClickListener(v -> {
-            String login = loginInput.getText().toString();
-            String password = passwordInput.getText().toString();
-            logIntoAccount(login, password, false);
-        });
-
-    }
-
-    public void onCheckboxClicked(View view) {
-        boolean checked = ((CheckBox) view).isChecked();
-        if (checked) {
-            isChecked = true;
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            isChecked = false;
+            super.onBackPressed();
         }
-
     }
-
-
-    private void logIntoAccount(String login, String password, boolean auto) {
-        Intent intent = new Intent(MainActivity.this, Activity.class);
-
-        db = FirebaseFirestore.getInstance();
-        db.collection("credentials")
-                .whereEqualTo("login", login)
-                .get().addOnCompleteListener(task -> {
-
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-                        String document = documentSnapshot.getString("password");
-                        String access = documentSnapshot.getString("access");
-                        if (Objects.equals(document, password)) {
-
-                            if (isChecked || auto) {
-                                createFile("cred", login, password);
-                            }
-                            else {
-                                createFile("cred", "", "");
-                            }
-                            intent.putExtra("access", access);
-                            intent.putExtra("login", login);
-                            intent.putExtra("password", password);
-
-                            createFile("currentLogin", documentSnapshot.getId(), "");
-
-                            startActivity(intent);
-
-                        } else {
-                            loginInput.setText("");
-                            passwordInput.setText("");
-                            Toast.makeText(MainActivity.this, "Неверные данные", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } else {
-                        loginInput.setText("");
-                        passwordInput.setText("");
-                        Toast.makeText(MainActivity.this, "Неверные данные", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
 }

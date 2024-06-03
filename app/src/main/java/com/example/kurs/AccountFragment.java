@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +31,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -49,7 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -79,7 +74,7 @@ public class AccountFragment extends Fragment {
 
         imagePickLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if(result.getResultCode() == Activity.RESULT_OK) {
+                    if(result.getResultCode() == MainActivity.RESULT_OK) {
                         Intent data = result.getData();
                         if(data != null && data.getData() != null) {
                             filePath = data.getData();
@@ -99,6 +94,7 @@ public class AccountFragment extends Fragment {
             progressDialog.show();
 
             StorageReference ref = storageReference.child("profile_pic/" + getIdFromFile());
+            //Toast.makeText(getActivity(), getIdFromFile(), Toast.LENGTH_SHORT).show();
 
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -154,6 +150,8 @@ public class AccountFragment extends Fragment {
             access = getArguments().getString("access");
             oldLogin = getArguments().getString("login");
         }
+
+        //Toast.makeText(getActivity(), getIdFromFile(), Toast.LENGTH_SHORT).show();
 
         applyBtn.setOnClickListener(v -> {
             login = newLogin.getText().toString();

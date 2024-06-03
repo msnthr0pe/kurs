@@ -20,6 +20,7 @@
 
     <EditText
         android:id="@+id/new_login"
+        android:singleLine="true"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
@@ -44,6 +45,7 @@
 
     <EditText
         android:id="@+id/new_password"
+        android:singleLine="true"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
