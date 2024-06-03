@@ -33,10 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     static boolean isChecked = false;
 
 
-    public void createFile(String filename, String login, String password) {
+    public void createFile(String filename, String login, String password, String access) {
         String fileContents;
         if (Objects.equals(filename, "cred")) {
-            fileContents = login + '\n' + password;
+            fileContents = login + '\n' + password + '\n' + access;
         }
         else {
             fileContents = login;
@@ -97,12 +97,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onCheckboxClicked(View view) {
-        boolean checked = ((CheckBox) view).isChecked();
-        if (checked) {
-            isChecked = true;
-        } else {
-            isChecked = false;
-        }
+        isChecked = ((CheckBox) view).isChecked();
 
     }
 
@@ -122,16 +117,16 @@ public class LoginActivity extends AppCompatActivity {
                         if (Objects.equals(document, password)) {
 
                             if (isChecked || auto) {
-                                createFile("cred", login, password);
+                                createFile("cred", login, password, access);
                             }
                             else {
-                                createFile("cred", "", "");
+                                createFile("cred", "", "", "");
                             }
                             intent.putExtra("access", access);
                             intent.putExtra("login", login);
                             intent.putExtra("password", password);
 
-                            createFile("currentLogin", documentSnapshot.getId(), "");
+                            createFile("currentLogin", documentSnapshot.getId(), "", "");
 
                             startActivity(intent);
 

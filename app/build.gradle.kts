@@ -45,7 +45,7 @@ dependencies {
     implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
     implementation("com.github.dhaval2404:imagepicker:2.1")
     implementation("com.github.bumptech.glide:glide:4.15.1")
-    implementation ("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-auth")
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     testImplementation(libs.junit)

@@ -82,7 +82,7 @@ public class AccountFragment extends Fragment {
                         }
                     }
                 }
-                );
+        );
     }
 
     private void uploadImage() {
@@ -145,28 +145,18 @@ public class AccountFragment extends Fragment {
         newLogin = view.findViewById(R.id.new_login);
         newPassword = view.findViewById(R.id.new_password);
         applyBtn = view.findViewById(R.id.apply);
-        access = "";
-        if (getArguments() != null) {
-            access = getArguments().getString("access");
-            oldLogin = getArguments().getString("login");
-        }
 
         //Toast.makeText(getActivity(), getIdFromFile(), Toast.LENGTH_SHORT).show();
 
         applyBtn.setOnClickListener(v -> {
+            ArrayList<String> fileContents = readFile();
+            oldLogin = fileContents.get(0);
+            access = fileContents.get(2);
+
             login = newLogin.getText().toString();
             password = newPassword.getText().toString();
 
-            DeleteData();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            oldId = getIdFromFile();
-            saveData();
-            deleteImageAttempt();
+            startDataModification();
 
             newLogin.setText("");
             newPassword.setText("");
@@ -209,10 +199,10 @@ public class AccountFragment extends Fragment {
         }
     }
 
-    public void createFile(String filename, String login, String password) {
+    public void createFile(String filename, String login, String password, String access) {
         String fileContents;
         if (Objects.equals(filename, "cred")) {
-            fileContents = login + '\n' + password;
+            fileContents = login + '\n' + password + '\n' + access;
         }
         else {
             fileContents = login;
@@ -246,7 +236,28 @@ public class AccountFragment extends Fragment {
         return null;
     }
 
-    private void DeleteData(){
+    public ArrayList<String> readFile() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        try (FileInputStream fis = requireActivity().openFileInput("cred")) {
+            InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
+                String line = reader.readLine();
+                arrayList.add(line);
+                while (line != null) {
+                    line = reader.readLine();
+                    arrayList.add(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return arrayList;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void startDataModification(){
         db.collection("credentials")
                 .whereEqualTo("login", oldLogin)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -263,8 +274,7 @@ public class AccountFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Void unused) {
 
-                                            //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-
+                                            saveData();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
@@ -295,8 +305,8 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(getActivity(), "Сохранено", Toast.LENGTH_SHORT).show();
-                        createFile("currentLogin", documentReference.getId(), "");
-                        createFile("cred", login, password);
+                        createFile("currentLogin", documentReference.getId(), "", "");
+                        createFile("cred", login, password, access);
                         uploadImage();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
