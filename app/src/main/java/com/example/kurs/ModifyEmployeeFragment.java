@@ -103,8 +103,8 @@ public class ModifyEmployeeFragment extends Fragment {
             String schedule = getArguments().getString("schedule");
 
             IDInput.setText(ID, TextView.BufferType.EDITABLE);
-            nameInput.setText(surname);
-            surnameInput.setText(name);
+            nameInput.setText(name);
+            surnameInput.setText(surname);
             postInput.setText(post);
             personalCardInput.setText(personalCard);
             employmentContractInput.setText(employmentContract);
